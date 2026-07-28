@@ -26,7 +26,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: php-${{ matrix.target }}
-          path: out/
+          path: runtime/
 
   build-mac:
     runs-on: macos-latest
@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: php-${{ matrix.target }}
-          path: out/
+          path: runtime/
 
   build-windows:
     runs-on: windows-latest
@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: php-${{ matrix.target }}
-          path: out/
+          path: runtime/
 
   release:
     needs: [build-linux-android, build-mac, build-windows]
@@ -72,12 +72,15 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: out/
+          path: runtime/
           merge-multiple: true
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: php-v${{ github.event.inputs.version || '8.4.0' }}
           name: PHP v${{ github.event.inputs.version || '8.4.0' }}
-          files: out/*
+          files: |
+            runtime/**/*.tar.gz
+            runtime/**/*.zip
+            runtime/**/*.sha256
           make_latest: true
