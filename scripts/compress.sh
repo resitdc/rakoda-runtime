@@ -15,7 +15,11 @@ echo "Compressing $RUNTIME $VERSION for $TARGET..."
 cd "runtime/$RUNTIME/$VERSION/$TARGET"
 
 if [[ "$TARGET" == *"windows"* ]]; then
-    zip -r "${RUNTIME}.zip" *
+    if command -v 7z &> /dev/null; then
+        7z a -tzip "${RUNTIME}.zip" *
+    else
+        powershell -Command "Compress-Archive -Path * -DestinationPath ${RUNTIME}.zip"
+    fi
     shasum -a 256 "${RUNTIME}.zip" > "${RUNTIME}.sha256"
 else
     # Fallback to tar.gz if zstd is not installed in runner
