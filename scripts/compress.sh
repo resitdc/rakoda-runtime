@@ -14,12 +14,13 @@ echo "Compressing $RUNTIME $VERSION for $TARGET..."
 
 generate_sha256() {
     local file=$1
+    local out=$2
     if command -v shasum &> /dev/null; then
-        shasum -a 256 "$file" > "${file%.*}.sha256"
+        shasum -a 256 "$file" > "$out"
     elif command -v sha256sum &> /dev/null; then
-        sha256sum "$file" > "${file%.*}.sha256"
+        sha256sum "$file" > "$out"
     else
-        powershell -Command "(Get-FileHash -Algorithm SHA256 -Path '$file').Hash.ToLower() + '  $file'" > "${file%.*}.sha256"
+        powershell -Command "(Get-FileHash -Algorithm SHA256 -Path '$file').Hash.ToLower() + '  $file'" > "$out"
     fi
 }
 
@@ -34,12 +35,12 @@ if [[ "$TARGET" == *"windows"* ]]; then
     else
         powershell -Command "Compress-Archive -Path * -DestinationPath ${RUNTIME}-${TARGET}.zip"
     fi
-    generate_sha256 "${RUNTIME}-${TARGET}.zip"
+    generate_sha256 "${RUNTIME}-${TARGET}.zip" "${RUNTIME}-${TARGET}.sha256"
     mv "${RUNTIME}-${TARGET}.zip" "../../../../out/"
     mv "${RUNTIME}-${TARGET}.sha256" "../../../../out/"
 else
     tar -czf "${RUNTIME}-${TARGET}.tar.gz" *
-    generate_sha256 "${RUNTIME}-${TARGET}.tar.gz"
+    generate_sha256 "${RUNTIME}-${TARGET}.tar.gz" "${RUNTIME}-${TARGET}.sha256"
     mv "${RUNTIME}-${TARGET}.tar.gz" "../../../../out/"
     mv "${RUNTIME}-${TARGET}.sha256" "../../../../out/"
 fi
