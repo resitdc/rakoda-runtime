@@ -1,44 +1,44 @@
 {
   "node": {
-    "latest": "24.18.0",
+    "latest": "22.0.0",
     "versions": {
       "22.0.0": {
         "android": {
           "arm64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-android-arm64-v8a.tar.gz",
-            "sha256": "placeholder-sha256",
-            "size": 1024
+            "sha256": "4e165a02ea43246b483e63c0c4f76484eae5ccc983dcd7a402fffa83c49e2aac",
+            "size": 167
           }
         },
         "linux": {
           "arm64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-linux-arm64.tar.gz",
-            "sha256": "placeholder-sha256",
-            "size": 1024
+            "sha256": "2ca56c5a71f51f562243fd23b086be652297291892d6c8174c78032ffa118c8e",
+            "size": 162
           },
           "x64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-linux-x64.tar.gz",
-            "sha256": "placeholder-sha256",
-            "size": 1024
+            "sha256": "028bc60aa545815ba3cbfc5696be3a360c8d9c9e5baa1d02084381feeb2c197a",
+            "size": 160
           }
         },
         "macos": {
           "arm64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-macos-arm64.tar.gz",
-            "sha256": "placeholder-sha256",
-            "size": 1024
+            "sha256": "de820df0a6fc415fec832f72a27c3871097600ffcce988ed48e979b51f262f1d",
+            "size": 156
           },
           "x64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-macos-x64.tar.gz",
-            "sha256": "placeholder-sha256",
-            "size": 1024
+            "sha256": "ca9a80f76d9fe3a463cab7610d71fff9ed6fc33e3ba07f3d8c2db995fd94e676",
+            "size": 156
           }
         },
         "windows": {
           "x64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-windows-x64.zip",
-            "sha256": "placeholder-sha256",
-            "size": 1024
+            "sha256": "32f2b03bafa31f09ab4c7af6866420223af9177223bbce719de4a0511089f5f2",
+            "size": 189
           }
         }
       },
