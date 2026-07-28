@@ -17,7 +17,7 @@ if (fs.existsSync(MANIFEST_PATH)) {
 function scanDirectory() {
     if (!fs.existsSync(RUNTIME_DIR)) return;
     
-    const runtimes = fs.readdirSync(RUNTIME_DIR);
+    const runtimes = fs.readdirSync(RUNTIME_DIR).filter(item => fs.statSync(path.join(RUNTIME_DIR, item)).isDirectory());
     for (const runtime of runtimes) {
         if (!manifest[runtime]) {
             manifest[runtime] = { latest: "", versions: {} };
@@ -25,7 +25,7 @@ function scanDirectory() {
         let latestVersion = manifest[runtime].latest;
         
         const runtimePath = path.join(RUNTIME_DIR, runtime);
-        const versions = fs.readdirSync(runtimePath);
+        const versions = fs.readdirSync(runtimePath).filter(item => fs.statSync(path.join(runtimePath, item)).isDirectory());
         
         for (const version of versions) {
             latestVersion = version; // Simplified version sorting
@@ -34,7 +34,7 @@ function scanDirectory() {
             }
             
             const versionPath = path.join(runtimePath, version);
-            const targets = fs.readdirSync(versionPath);
+            const targets = fs.readdirSync(versionPath).filter(item => fs.statSync(path.join(versionPath, item)).isDirectory());
             
             for (const target of targets) {
                 const [os, arch] = target.split('-');
@@ -43,13 +43,32 @@ function scanDirectory() {
                 }
                 
                 const targetPath = path.join(versionPath, target);
-                // In real world, we would read the SHA256 file and get the exact artifact URL
                 const isWindows = target.includes('windows');
                 const ext = isWindows ? 'zip' : 'tar.gz';
+                
+                const archiveFile = `${runtime}-${target}.${ext}`;
+                const sha256File = `${runtime}-${target}.sha256`;
+                
+                let sha256Value = "placeholder-sha256";
+                let sizeValue = 1024;
+                
+                const archivePath = path.join(targetPath, archiveFile);
+                const sha256Path = path.join(targetPath, sha256File);
+                
+                if (fs.existsSync(sha256Path)) {
+                    const content = fs.readFileSync(sha256Path, 'utf8').trim();
+                    sha256Value = content.split(/\s+/)[0]; 
+                }
+                
+                if (fs.existsSync(archivePath)) {
+                    const stats = fs.statSync(archivePath);
+                    sizeValue = stats.size;
+                }
+
                 manifest[runtime].versions[version][os][arch || 'x64'] = {
                     url: `https://github.com/resitdc/rakoda-runtime/releases/download/${runtime}-v${version}/${runtime}-${target}.${ext}`,
-                    sha256: "placeholder-sha256",
-                    size: 1024
+                    sha256: sha256Value,
+                    size: sizeValue
                 };
             }
         }
