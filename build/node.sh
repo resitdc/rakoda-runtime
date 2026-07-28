@@ -61,8 +61,9 @@ case "$TARGET" in
     mkdir -p tmp_android && cd tmp_android
     
     # Download nodejs deb from termux package mirror
-    DEB_URL="https://grimler.se/termux/termux-main/pool/main/n/nodejs/nodejs_22.0.0_aarch64.deb"
-    curl -L -o node.deb "$DEB_URL"
+    LATEST_DEB=$(curl -s https://grimler.se/termux/termux-main/pool/main/n/nodejs/ | grep aarch64.deb | head -n 1 | grep -o 'nodejs_[^"]*\.deb' | head -n 1)
+    DEB_URL="https://grimler.se/termux/termux-main/pool/main/n/nodejs/$LATEST_DEB"
+    curl -f -L -o node.deb "$DEB_URL"
     
     # Extract deb (GitHub actions uses Ubuntu, so ar is available)
     ar x node.deb

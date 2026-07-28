@@ -58,8 +58,9 @@ case "$TARGET" in
     PHP_FILE="php-$VERSION-nts-Win32-vs16-x64.zip"
     echo "Downloading Windows PHP $PHP_FILE..."
     # Download official Windows PHP binary
-    curl -L -o "$PHP_FILE" "https://windows.php.net/downloads/releases/$PHP_FILE" || \
-    curl -L -o "$PHP_FILE" "https://windows.php.net/downloads/releases/archives/$PHP_FILE"
+    curl -f -L -o "$PHP_FILE" "https://windows.php.net/downloads/releases/$PHP_FILE" || \
+    curl -f -L -o "$PHP_FILE" "https://windows.php.net/downloads/releases/archives/$PHP_FILE" || \
+    curl -f -L -o "$PHP_FILE" "https://downloads.php.net/~windows/releases/archives/$PHP_FILE"
     unzip -q "$PHP_FILE" -d "tmp_php"
     mv "tmp_php/php.exe" "$OUT_DIR/"
     rm -rf "tmp_php" "$PHP_FILE"
