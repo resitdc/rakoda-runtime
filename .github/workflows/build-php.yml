@@ -61,3 +61,23 @@ jobs:
         with:
           name: php-${{ matrix.target }}
           path: runtime/
+
+  release:
+    needs: [build-linux-android, build-mac, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: runtime/
+          merge-multiple: true
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: php-v${{ github.event.inputs.version || '8.4.0' }}
+          name: PHP v${{ github.event.inputs.version || '8.4.0' }}
+          files: runtime/*
+          make_latest: true

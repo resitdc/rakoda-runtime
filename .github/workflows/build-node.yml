@@ -61,3 +61,23 @@ jobs:
         with:
           name: node-${{ matrix.target }}
           path: runtime/
+
+  release:
+    needs: [build-linux-android, build-mac, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: runtime/
+          merge-multiple: true
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: node-v${{ github.event.inputs.version || '22.0.0' }}
+          name: Node.js v${{ github.event.inputs.version || '22.0.0' }}
+          files: runtime/*
+          make_latest: true
