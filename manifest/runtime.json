@@ -5,38 +5,38 @@
       "8.4.0": {
         "android": {
           "arm64": {
-            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-android-arm64-v8a.tar.zst",
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-android-arm64-v8a.tar.gz",
             "sha256": "placeholder-sha256",
             "size": 1024
           }
         },
         "linux": {
           "arm64": {
-            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-linux-arm64.tar.zst",
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-linux-arm64.tar.gz",
             "sha256": "placeholder-sha256",
             "size": 1024
           },
           "x64": {
-            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-linux-x64.tar.zst",
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-linux-x64.tar.gz",
             "sha256": "placeholder-sha256",
             "size": 1024
           }
         },
         "macos": {
           "arm64": {
-            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-macos-arm64.tar.zst",
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-macos-arm64.tar.gz",
             "sha256": "placeholder-sha256",
             "size": 1024
           },
           "x64": {
-            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-macos-x64.tar.zst",
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-macos-x64.tar.gz",
             "sha256": "placeholder-sha256",
             "size": 1024
           }
         },
         "windows": {
           "x64": {
-            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-windows-x64.tar.zst",
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-windows-x64.zip",
             "sha256": "placeholder-sha256",
             "size": 1024
           }
