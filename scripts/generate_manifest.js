@@ -5,22 +5,33 @@ const crypto = require('crypto');
 const RUNTIME_DIR = path.join(__dirname, '../runtime');
 const MANIFEST_PATH = path.join(__dirname, '../manifest/runtime.json');
 
-const manifest = {};
+let manifest = {};
+if (fs.existsSync(MANIFEST_PATH)) {
+    try {
+        manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
+    } catch (e) {
+        manifest = {};
+    }
+}
 
 function scanDirectory() {
     if (!fs.existsSync(RUNTIME_DIR)) return;
     
     const runtimes = fs.readdirSync(RUNTIME_DIR);
     for (const runtime of runtimes) {
-        manifest[runtime] = { latest: "", versions: {} };
-        let latestVersion = "";
+        if (!manifest[runtime]) {
+            manifest[runtime] = { latest: "", versions: {} };
+        }
+        let latestVersion = manifest[runtime].latest;
         
         const runtimePath = path.join(RUNTIME_DIR, runtime);
         const versions = fs.readdirSync(runtimePath);
         
         for (const version of versions) {
             latestVersion = version; // Simplified version sorting
-            manifest[runtime].versions[version] = {};
+            if (!manifest[runtime].versions[version]) {
+                manifest[runtime].versions[version] = {};
+            }
             
             const versionPath = path.join(runtimePath, version);
             const targets = fs.readdirSync(versionPath);
