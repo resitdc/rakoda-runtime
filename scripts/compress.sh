@@ -34,14 +34,8 @@ if [[ "$TARGET" == *"windows"* ]]; then
     fi
     generate_sha256 "${RUNTIME}.zip"
 else
-    # Fallback to tar.gz if zstd is not installed in runner
-    if command -v zstd &> /dev/null; then
-        tar --zstd -cf "${RUNTIME}.tar.zst" *
-        generate_sha256 "${RUNTIME}.tar.zst"
-    else
-        tar -czf "${RUNTIME}.tar.gz" *
-        generate_sha256 "${RUNTIME}.tar.gz"
-    fi
+    tar -czf "${RUNTIME}.tar.gz" *
+    generate_sha256 "${RUNTIME}.tar.gz"
 fi
 
 echo "Compression complete."

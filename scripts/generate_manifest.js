@@ -33,8 +33,10 @@ function scanDirectory() {
                 
                 const targetPath = path.join(versionPath, target);
                 // In real world, we would read the SHA256 file and get the exact artifact URL
+                const isWindows = target.includes('windows');
+                const ext = isWindows ? 'zip' : 'tar.gz';
                 manifest[runtime].versions[version][os][arch || 'x64'] = {
-                    url: `https://github.com/resitdc/rakoda-runtime/releases/download/${runtime}-v${version}/${runtime}-${target}.tar.zst`,
+                    url: `https://github.com/resitdc/rakoda-runtime/releases/download/${runtime}-v${version}/${runtime}-${target}.${ext}`,
                     sha256: "placeholder-sha256",
                     size: 1024
                 };
