@@ -43,5 +43,50 @@
         }
       }
     }
+  },
+  "node": {
+    "latest": "22.0.0",
+    "versions": {
+      "22.0.0": {
+        "android": {
+          "arm64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-android-arm64-v8a.tar.gz",
+            "sha256": "212cf442ddd1f2895aa255a6e1b684664979679c88ac0de011c7e5a3d377d4df",
+            "size": 15985965
+          }
+        },
+        "linux": {
+          "arm64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-linux-arm64.tar.gz",
+            "sha256": "febf13b6595bd1f8b372ad24eb803d06eaadcc6dae7af6ec9c51f062f263166e",
+            "size": 38862145
+          },
+          "x64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-linux-x64.tar.gz",
+            "sha256": "3f4abee0ec701eac41cd87837bf2d6735201d9a95141213ca768b7cfb527402b",
+            "size": 39238519
+          }
+        },
+        "macos": {
+          "arm64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-macos-arm64.tar.gz",
+            "sha256": "2937d1d0d111e259662f4eef129a9667cc252e4ceb797782a9e9d899de4cb7dc",
+            "size": 33510012
+          },
+          "x64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-macos-x64.tar.gz",
+            "sha256": "b8ced2e30b4ef6481d1f8a6d51f5d65d59338933f985418cdfc55510580475e6",
+            "size": 35580049
+          }
+        },
+        "windows": {
+          "x64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-windows-x64.zip",
+            "sha256": "33ddcc885be4ec509697e1cbd25dfc1670cd35b9c26cb168eedb03bfa1e61a8d",
+            "size": 28333489
+          }
+        }
+      }
+    }
   }
 }
