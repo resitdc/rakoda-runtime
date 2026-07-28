@@ -26,16 +26,22 @@ generate_sha256() {
 
 cd "runtime/$RUNTIME/$VERSION/$TARGET"
 
+mkdir -p "../../../../out"
+
 if [[ "$TARGET" == *"windows"* ]]; then
     if command -v 7z &> /dev/null; then
-        7z a -tzip "${RUNTIME}.zip" *
+        7z a -tzip "${RUNTIME}-${TARGET}.zip" *
     else
-        powershell -Command "Compress-Archive -Path * -DestinationPath ${RUNTIME}.zip"
+        powershell -Command "Compress-Archive -Path * -DestinationPath ${RUNTIME}-${TARGET}.zip"
     fi
-    generate_sha256 "${RUNTIME}.zip"
+    generate_sha256 "${RUNTIME}-${TARGET}.zip"
+    mv "${RUNTIME}-${TARGET}.zip" "../../../../out/"
+    mv "${RUNTIME}-${TARGET}.sha256" "../../../../out/"
 else
-    tar -czf "${RUNTIME}.tar.gz" *
-    generate_sha256 "${RUNTIME}.tar.gz"
+    tar -czf "${RUNTIME}-${TARGET}.tar.gz" *
+    generate_sha256 "${RUNTIME}-${TARGET}.tar.gz"
+    mv "${RUNTIME}-${TARGET}.tar.gz" "../../../../out/"
+    mv "${RUNTIME}-${TARGET}.sha256" "../../../../out/"
 fi
 
-echo "Compression complete."
+echo "Compression complete. Files moved to out/ directory."

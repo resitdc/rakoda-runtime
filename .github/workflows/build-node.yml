@@ -26,7 +26,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-${{ matrix.target }}
-          path: runtime/
+          path: out/
 
   build-mac:
     runs-on: macos-latest
@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-${{ matrix.target }}
-          path: runtime/
+          path: out/
 
   build-windows:
     runs-on: windows-latest
@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-${{ matrix.target }}
-          path: runtime/
+          path: out/
 
   release:
     needs: [build-linux-android, build-mac, build-windows]
@@ -72,12 +72,12 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: runtime/
+          path: out/
           merge-multiple: true
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: node-v${{ github.event.inputs.version || '22.0.0' }}
           name: Node.js v${{ github.event.inputs.version || '22.0.0' }}
-          files: runtime/*
+          files: out/*
           make_latest: true
