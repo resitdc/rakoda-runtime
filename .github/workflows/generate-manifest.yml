@@ -18,6 +18,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Download Artifacts
+        if: github.event.workflow_run != null
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: runtime/
+          merge-multiple: true
       - name: Generate Manifest
         run: node scripts/generate_manifest.js
       - name: Commit and Push
