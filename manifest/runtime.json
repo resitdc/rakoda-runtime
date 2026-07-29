@@ -6,38 +6,38 @@
         "android": {
           "arm64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.3.0/php-android-arm64-v8a.tar.gz",
-            "sha256": "4c7fec2521db98682077428f11d140d8317c3266e7b0e02f847bcef3db0d474d",
-            "size": 34685165
+            "sha256": "5060da61e18eca9ff8b2d8112757e2839a61d3d4dc316ed924df4c9e6bf002da",
+            "size": 34685128
           }
         },
         "linux": {
           "arm64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.3.0/php-linux-arm64.tar.gz",
-            "sha256": "69127ae14cbfda00ea3ff0147a0b610a298acb4b7af756b8ac2c05a16b501a31",
-            "size": 9791574
+            "sha256": "db323af015615bb1c640aae40cb7e8f31d4742313081b30a93c05639dd3f931f",
+            "size": 9791488
           },
           "x64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.3.0/php-linux-x64.tar.gz",
-            "sha256": "4c10567d3acb4e3b7ee25f5e3beca4a04261c8ea73fefec61686fb2e208eaab3",
-            "size": 9427159
+            "sha256": "533930be428eb1b102835ec43ef755c5a9d51ea03379a6da4b7749047acf0346",
+            "size": 9427147
           }
         },
         "macos": {
           "arm64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.3.0/php-macos-arm64.tar.gz",
-            "sha256": "811d82f9f285a4931b17541451c0eebce2d013e4d47591dad84813480bf05aad",
-            "size": 9201174
+            "sha256": "ac87921ceb75cd945bccea29004d9150f52606af82e3ed7e9acf4caa9e5597f6",
+            "size": 9201182
           },
           "x64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.3.0/php-macos-x64.tar.gz",
-            "sha256": "789d708f9c741e00a0ce183fbb814ea334ce80a16e840534a8969e821fd5216e",
-            "size": 9340999
+            "sha256": "629956339652cff7f78b531d9344906efd71a8a48d7f9b36b22e75dd0d406f03",
+            "size": 9341003
           }
         },
         "windows": {
           "x64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.3.0/php-windows-x64.zip",
-            "sha256": "df8dba37f3624ffd4baec355d63af179d7a7096c481a0061c31dc0f3c7fdd084",
+            "sha256": "b2ee3c6201352adc6d6008d57c08eaccba5bfdedea86d7bbb1e3b6ce741670fa",
             "size": 848192
           }
         }
