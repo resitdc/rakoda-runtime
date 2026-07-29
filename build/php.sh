@@ -66,12 +66,56 @@ case "$TARGET" in
     rm -rf "tmp_php" "$PHP_FILE"
     ;;
   "android-arm64-v8a")
-    echo "Downloading Static PHP for Android..."
-    PHP_FILE="php-$PHP_VER-cli-linux-aarch64.tar.gz"
-    curl -L -o "$PHP_FILE" "https://dl.static-php.dev/static-php-cli/common/$PHP_FILE"
-    tar -xzf "$PHP_FILE"
-    mv php "$OUT_DIR/"
-    rm -f "$PHP_FILE"
+    ANDROID_ARCH="aarch64"
+    echo "Downloading Android PHP and dependencies from Termux..."
+    mkdir -p tmp_android && cd tmp_android
+    
+    echo "Fetching Termux Packages index..."
+    curl -f -s -L -o Packages "https://grimler.se/termux/termux-main/dists/stable/main/binary-$ANDROID_ARCH/Packages"
+    
+    PKGS="php capstone libandroid-glob libandroid-support libbz2 libc++ boost libiconv liblzma zlib libandroid-wordexp libcurl libnghttp2 libnghttp3 libngtcp2 openssl ca-certificates libssh2 libffi libgmp libicu libresolv-wrapper resolv-conf libsqlite libxml2 libxslt libgcrypt libgpg-error libzip zstd oniguruma pcre2 readline ncurses tidy"
+    
+    for PKG in $PKGS; do
+        FILENAME=$(grep -A 20 "^Package: $PKG\$" Packages | grep "^Filename: " | head -n 1 | awk '{print $2}')
+        if [ -n "$FILENAME" ]; then
+            echo "Downloading $PKG..."
+            curl -f -s -L -o "$PKG.deb" "https://grimler.se/termux/termux-main/$FILENAME"
+            
+            ar x "$PKG.deb" 2>/dev/null || true
+            tar -xf data.tar.xz 2>/dev/null || tar -xf data.tar.gz 2>/dev/null || echo "Failed to extract $PKG data"
+            rm -f "$PKG.deb" data.tar.* control.tar.* debian-binary
+        else
+            echo "Warning: Package $PKG not found in Termux repo"
+        fi
+    done
+    cd ..
+    
+    mkdir -p "$OUT_DIR/lib"
+    if [ -f "tmp_android/data/data/com.termux/files/usr/bin/php" ]; then
+        mv tmp_android/data/data/com.termux/files/usr/bin/php "$OUT_DIR/php.bin"
+    else
+        echo "Error: php binary not found!"
+        exit 1
+    fi
+    
+    if [ -d "tmp_android/data/data/com.termux/files/usr/lib" ]; then
+        cp -a tmp_android/data/data/com.termux/files/usr/lib/*.so* "$OUT_DIR/lib/" 2>/dev/null || true
+    fi
+    
+    rm -rf tmp_android
+    
+    cat << 'EOF' > "$OUT_DIR/php"
+#!/system/bin/sh
+DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -f "/system/bin/linker64" ] && [ -f "$DIR/php.bin" ]; then
+    export LD_LIBRARY_PATH="$DIR/lib:$LD_LIBRARY_PATH"
+    exec /system/bin/linker64 "$DIR/php.bin" "$@"
+else
+    export LD_LIBRARY_PATH="$DIR/lib:$LD_LIBRARY_PATH"
+    exec "$DIR/php.bin" "$@"
+fi
+    EOF
+    chmod +x "$OUT_DIR/php"
     ;;
   *)
     echo "Unknown target: $TARGET"
