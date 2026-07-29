@@ -51,39 +51,39 @@
         "android": {
           "arm64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-android-arm64-v8a.tar.gz",
-            "sha256": "eba026ecda1eb7d42702f97074b35da3322dc004b50affb95899b246f12fbb1c",
-            "size": 40210270
+            "sha256": "fe50c7345bd39eb831b31be04439a594c26f760eaad408836fb69b0b2b43470a",
+            "size": 40204635
           }
         },
         "linux": {
           "arm64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-linux-arm64.tar.gz",
-            "sha256": "59039f50195c81132502c6161d388058231e6193120973a8c2baa0f6ae78bb90",
-            "size": 43260512
+            "sha256": "d1d4f625427b5b7bfd3f2186370bd3644ec5b6f4b72d84ea95618435e4cbb31c",
+            "size": 43265671
           },
           "x64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-linux-x64.tar.gz",
-            "sha256": "c6c4d424b8cde1a3b690b02e706babec75c6348f3d78749d128e3d37a9cc7b1d",
-            "size": 43638606
+            "sha256": "938b5cc54d9c0f0cc4573963f0fadc774e94789677b8ffaa095dba15a006faee",
+            "size": 43634113
           }
         },
         "macos": {
           "arm64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-macos-arm64.tar.gz",
-            "sha256": "6a2c5a2065e6089aff09956ad2164f1584f3397717b6fc1f83fb50c2a00193e5",
-            "size": 37892613
+            "sha256": "a8db8bdf95154e7299ea2cde5f331e3d2612504b75dafdf170c3f1494636a941",
+            "size": 37893079
           },
           "x64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-macos-x64.tar.gz",
-            "sha256": "6fb488bf7ffc653ad71694d37b7dd2d80718bdd2581f274008a00be7ae9f9ae0",
-            "size": 39963443
+            "sha256": "dc7908259350619445c63084b76a76ecc731b4c2c5c186fbdb5806ade2fb1e84",
+            "size": 39963338
           }
         },
         "windows": {
           "x64": {
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/node-v22.0.0/node-windows-x64.zip",
-            "sha256": "acf270735fc10a2eeae8fc5808bff3d93b2664436457deeb2f4c6437e8905470",
-            "size": 33819380
+            "sha256": "b34ff31660192bdc9ee22a801c18685eef550f647e6f18a0618b643952d15419",
+            "size": 33820007
           }
         }
       }
