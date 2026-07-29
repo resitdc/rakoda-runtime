@@ -106,7 +106,13 @@ export HOME="$DIR"
 export TMPDIR="$DIR/tmp"
 mkdir -p "$TMPDIR"
 export LD_LIBRARY_PATH="$DIR/lib:$LD_LIBRARY_PATH"
-exec "$DIR/node.bin" "$@"
+export NODE_DIR="$DIR"
+export NODE_OPTIONS="--require $DIR/hook.js $NODE_OPTIONS"
+if [ -f "/system/bin/linker64" ]; then
+    exec /system/bin/linker64 "$DIR/node.bin" "$@"
+else
+    exec "$DIR/node.bin" "$@"
+fi
 EOF
     chmod +x "$OUT_DIR/node"
     
@@ -157,6 +163,8 @@ export HOME="\$DIR"
 export TMPDIR="\$DIR/tmp"
 mkdir -p "\$TMPDIR"
 export npm_config_cache="\$DIR/.npm-cache"
+export NODE_DIR="\$DIR"
+export NODE_OPTIONS="--require \$DIR/hook.js \$NODE_OPTIONS"
 if [ -f "/system/bin/linker64" ] && [ -f "\$DIR/node.bin" ]; then
     export LD_LIBRARY_PATH="\$DIR/lib:\$LD_LIBRARY_PATH"
     exec /system/bin/linker64 "\$DIR/node.bin" "\$DIR/lib/node_modules/npm/bin/npm-cli.js" "\$@"
@@ -172,6 +180,8 @@ export HOME="\$DIR"
 export TMPDIR="\$DIR/tmp"
 mkdir -p "\$TMPDIR"
 export npm_config_cache="\$DIR/.npm-cache"
+export NODE_DIR="\$DIR"
+export NODE_OPTIONS="--require \$DIR/hook.js \$NODE_OPTIONS"
 if [ -f "/system/bin/linker64" ] && [ -f "\$DIR/node.bin" ]; then
     export LD_LIBRARY_PATH="\$DIR/lib:\$LD_LIBRARY_PATH"
     exec /system/bin/linker64 "\$DIR/node.bin" "\$DIR/lib/node_modules/npm/bin/npx-cli.js" "\$@"
@@ -187,6 +197,8 @@ export HOME="\$DIR"
 export TMPDIR="\$DIR/tmp"
 mkdir -p "\$TMPDIR"
 export npm_config_cache="\$DIR/.npm-cache"
+export NODE_DIR="\$DIR"
+export NODE_OPTIONS="--require \$DIR/hook.js \$NODE_OPTIONS"
 if [ -f "/system/bin/linker64" ] && [ -f "\$DIR/node.bin" ]; then
     export LD_LIBRARY_PATH="\$DIR/lib:\$LD_LIBRARY_PATH"
     exec /system/bin/linker64 "\$DIR/node.bin" "\$DIR/lib/node_modules/pnpm.cjs" "\$@"
@@ -197,5 +209,53 @@ EOF
 
     chmod +x "$OUT_DIR/npm" "$OUT_DIR/npx" "$OUT_DIR/pnpm"
 fi
+
+
+    cat << 'EOF_HOOK' > "$OUT_DIR/hook.js"
+const cp = require('child_process');
+const path = require('path');
+const nodeDir = process.env.NODE_DIR;
+if (!nodeDir) return;
+
+function patchArgs(command, args) {
+    if (command === 'sh' || command === '/system/bin/sh') {
+        const cIdx = args.indexOf('-c');
+        if (cIdx !== -1 && args[cIdx + 1]) {
+            let s = args[cIdx + 1];
+            s = s.replace(/(^|;|&|\||\(|\s)node(\s|$)/g, `$1sh ${nodeDir}/node$2`);
+            s = s.replace(/(^|;|&|\||\(|\s)npm(\s|$)/g, `$1sh ${nodeDir}/npm$2`);
+            s = s.replace(/(^|;|&|\||\(|\s)npx(\s|$)/g, `$1sh ${nodeDir}/npx$2`);
+            s = s.replace(/(^|;|&|\||\(|\s)pnpm(\s|$)/g, `$1sh ${nodeDir}/pnpm$2`);
+            s = s.replace(/(^|;|&|\||\(|\s)pnpx(\s|$)/g, `$1sh ${nodeDir}/pnpx$2`);
+            args[cIdx + 1] = s;
+        }
+    } else if (command === 'node' || command.endsWith('/node.bin') || command.endsWith('/node')) {
+        command = 'sh';
+        args.unshift(`${nodeDir}/node`);
+    } else if (command === 'npm' || command.endsWith('/npm')) {
+        command = 'sh';
+        args.unshift(`${nodeDir}/npm`);
+    } else if (command === 'pnpm' || command.endsWith('/pnpm')) {
+        command = 'sh';
+        args.unshift(`${nodeDir}/pnpm`);
+    }
+    return { command, args };
+}
+
+const origSpawn = cp.spawn;
+cp.spawn = function(command, args, options) {
+    if (!Array.isArray(args)) { options = args; args = []; }
+    const p = patchArgs(command, args);
+    return origSpawn.call(this, p.command, p.args, options);
+};
+
+const origSpawnSync = cp.spawnSync;
+cp.spawnSync = function(command, args, options) {
+    if (!Array.isArray(args)) { options = args; args = []; }
+    const p = patchArgs(command, args);
+    return origSpawnSync.call(this, p.command, p.args, options);
+};
+EOF_HOOK
+
 
 echo "Build complete."
