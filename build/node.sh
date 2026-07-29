@@ -56,23 +56,47 @@ case "$TARGET" in
     rm -rf "$NODE_FILE" "${NODE_FILE%.zip}"
     ;;
   "android-arm64-v8a")
-    echo "Downloading Node.js for Android (Termux build)..."
-    # We download a known termux nodejs build and some basic shared libraries it might need
+    ANDROID_ARCH="aarch64"
+    echo "Downloading Android Node.js and dependencies..."
     mkdir -p tmp_android && cd tmp_android
     
-    # Download nodejs deb from termux package mirror
-    LATEST_DEB=$(curl -s https://grimler.se/termux/termux-main/pool/main/n/nodejs/ | grep aarch64.deb | head -n 1 | grep -o 'nodejs_[^"]*\.deb' | head -n 1)
-    DEB_URL="https://grimler.se/termux/termux-main/pool/main/n/nodejs/$LATEST_DEB"
-    curl -f -L -o node.deb "$DEB_URL"
+    echo "Fetching Termux Packages index..."
+    curl -f -s -L -o Packages "https://grimler.se/termux/termux-main/dists/stable/main/binary-$ANDROID_ARCH/Packages"
     
-    # Extract deb (GitHub actions uses Ubuntu, so ar is available)
-    ar x node.deb
-    tar -xf data.tar.xz
+    PKGS="nodejs libc++ openssl c-ares libicu libsqlite zlib libffi resolv-conf libandroid-support"
     
+    for PKG in $PKGS; do
+        FILENAME=$(grep -A 20 "^Package: $PKG\$" Packages | grep "^Filename: " | head -n 1 | awk '{print $2}')
+        if [ -n "$FILENAME" ]; then
+            echo "Downloading $PKG..."
+            curl -f -s -L -o "$PKG.deb" "https://grimler.se/termux/termux-main/$FILENAME"
+            
+            # Extract deb
+            ar x "$PKG.deb"
+            tar -xf data.tar.xz || tar -xf data.tar.gz || echo "Failed to extract $PKG data"
+            rm -f "$PKG.deb" data.tar.* control.tar.* debian-binary
+        else
+            echo "Warning: Package $PKG not found in Termux repo for $ANDROID_ARCH"
+        fi
+    done
     cd ..
     
-    # Move the binary
-    mv tmp_android/data/data/com.termux/files/usr/bin/node "$OUT_DIR/node.bin"
+    mkdir -p "$OUT_DIR/lib"
+    # Move the node binary
+    if [ -f "tmp_android/data/data/com.termux/files/usr/bin/node" ]; then
+        mv tmp_android/data/data/com.termux/files/usr/bin/node "$OUT_DIR/node.bin"
+    else
+        echo "Error: node binary not found after extraction!"
+        exit 1
+    fi
+    
+    # Move all shared libraries needed by node
+    if [ -d "tmp_android/data/data/com.termux/files/usr/lib" ]; then
+        cp -a tmp_android/data/data/com.termux/files/usr/lib/*.so* "$OUT_DIR/lib/" 2>/dev/null || true
+    fi
+    
+    # Clean up extraction temp folder
+    rm -rf tmp_android Packages
     
     # Create wrapper script
     cat << 'EOF' > "$OUT_DIR/node"
