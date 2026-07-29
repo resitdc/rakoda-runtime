@@ -107,6 +107,9 @@ case "$TARGET" in
     cat << 'EOF' > "$OUT_DIR/php"
 #!/system/bin/sh
 DIR="$(cd "$(dirname "$0")" && pwd)"
+export HOME="$DIR"
+export TMPDIR="$DIR/tmp"
+mkdir -p "$TMPDIR"
 if [ -f "/system/bin/linker64" ] && [ -f "$DIR/php.bin" ]; then
     export LD_LIBRARY_PATH="$DIR/lib:$LD_LIBRARY_PATH"
     exec /system/bin/linker64 "$DIR/php.bin" "$@"
@@ -136,6 +139,10 @@ else
     cat << 'EOF' > "$OUT_DIR/composer"
 #!/system/bin/sh
 DIR="$(cd "$(dirname "$0")" && pwd)"
+export HOME="$DIR"
+export TMPDIR="$DIR/tmp"
+mkdir -p "$TMPDIR"
+export COMPOSER_HOME="$DIR/.composer"
 exec "$DIR/php" "$DIR/composer.phar" "$@"
 EOF
     chmod +x "$OUT_DIR/composer"

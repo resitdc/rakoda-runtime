@@ -102,6 +102,9 @@ case "$TARGET" in
     cat << 'EOF' > "$OUT_DIR/node"
 #!/system/bin/sh
 DIR="$(cd "$(dirname "$0")" && pwd)"
+export HOME="$DIR"
+export TMPDIR="$DIR/tmp"
+mkdir -p "$TMPDIR"
 export LD_LIBRARY_PATH="$DIR/lib:$LD_LIBRARY_PATH"
 exec "$DIR/node.bin" "$@"
 EOF
@@ -150,6 +153,10 @@ else
     cat << EOF > "$OUT_DIR/npm"
 $SH_PATH
 DIR="\$(cd "\$(dirname "\$0")" && pwd)"
+export HOME="\$DIR"
+export TMPDIR="\$DIR/tmp"
+mkdir -p "\$TMPDIR"
+export npm_config_cache="\$DIR/.npm-cache"
 if [ -f "/system/bin/linker64" ] && [ -f "\$DIR/node.bin" ]; then
     export LD_LIBRARY_PATH="\$DIR/lib:\$LD_LIBRARY_PATH"
     exec /system/bin/linker64 "\$DIR/node.bin" "\$DIR/lib/node_modules/npm/bin/npm-cli.js" "\$@"
@@ -161,6 +168,10 @@ EOF
     cat << EOF > "$OUT_DIR/npx"
 $SH_PATH
 DIR="\$(cd "\$(dirname "\$0")" && pwd)"
+export HOME="\$DIR"
+export TMPDIR="\$DIR/tmp"
+mkdir -p "\$TMPDIR"
+export npm_config_cache="\$DIR/.npm-cache"
 if [ -f "/system/bin/linker64" ] && [ -f "\$DIR/node.bin" ]; then
     export LD_LIBRARY_PATH="\$DIR/lib:\$LD_LIBRARY_PATH"
     exec /system/bin/linker64 "\$DIR/node.bin" "\$DIR/lib/node_modules/npm/bin/npx-cli.js" "\$@"
@@ -172,6 +183,10 @@ EOF
     cat << EOF > "$OUT_DIR/pnpm"
 $SH_PATH
 DIR="\$(cd "\$(dirname "\$0")" && pwd)"
+export HOME="\$DIR"
+export TMPDIR="\$DIR/tmp"
+mkdir -p "\$TMPDIR"
+export npm_config_cache="\$DIR/.npm-cache"
 if [ -f "/system/bin/linker64" ] && [ -f "\$DIR/node.bin" ]; then
     export LD_LIBRARY_PATH="\$DIR/lib:\$LD_LIBRARY_PATH"
     exec /system/bin/linker64 "\$DIR/node.bin" "\$DIR/lib/node_modules/pnpm.cjs" "\$@"
