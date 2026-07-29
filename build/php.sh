@@ -79,4 +79,22 @@ case "$TARGET" in
     ;;
 esac
 
+# Download Composer
+echo "Downloading Composer..."
+curl -L -o "$OUT_DIR/composer.phar" "https://getcomposer.org/download/latest-stable/composer.phar"
+
+if [ "$TARGET" == "windows-x64" ]; then
+    cat << 'EOF' > "$OUT_DIR/composer.bat"
+@echo off
+"%~dp0php.exe" "%~dp0composer.phar" %*
+EOF
+else
+    cat << 'EOF' > "$OUT_DIR/composer"
+#!/system/bin/sh
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec "$DIR/php" "$DIR/composer.phar" "$@"
+EOF
+    chmod +x "$OUT_DIR/composer"
+fi
+
 echo "Build complete."

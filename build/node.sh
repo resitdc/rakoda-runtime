@@ -119,4 +119,68 @@ EOF
     ;;
 esac
 
+echo "Downloading NPM..."
+mkdir -p "$OUT_DIR/lib/node_modules"
+curl -sL "https://registry.npmjs.org/npm/-/npm-10.8.1.tgz" | tar -xz -C "$OUT_DIR/lib/node_modules"
+mv "$OUT_DIR/lib/node_modules/package" "$OUT_DIR/lib/node_modules/npm"
+
+echo "Downloading PNPM..."
+curl -sL -o "$OUT_DIR/lib/node_modules/pnpm.cjs" "https://unpkg.com/pnpm@9.4.0/dist/pnpm.cjs"
+
+if [ "$TARGET" == "windows-x64" ]; then
+    cat << 'EOF' > "$OUT_DIR/npm.cmd"
+@echo off
+"%~dp0node.exe" "%~dp0lib\node_modules\npm\bin\npm-cli.js" %*
+EOF
+    cat << 'EOF' > "$OUT_DIR/npx.cmd"
+@echo off
+"%~dp0node.exe" "%~dp0lib\node_modules\npm\bin\npx-cli.js" %*
+EOF
+    cat << 'EOF' > "$OUT_DIR/pnpm.cmd"
+@echo off
+"%~dp0node.exe" "%~dp0lib\node_modules\pnpm.cjs" %*
+EOF
+else
+    if [ "$TARGET" == "android-arm64-v8a" ]; then
+        SH_PATH="#!/system/bin/sh"
+    else
+        SH_PATH="#!/bin/sh"
+    fi
+
+    cat << EOF > "$OUT_DIR/npm"
+$SH_PATH
+DIR="\$(cd "\$(dirname "\$0")" && pwd)"
+if [ -f "/system/bin/linker64" ] && [ -f "\$DIR/node.bin" ]; then
+    export LD_LIBRARY_PATH="\$DIR/lib:\$LD_LIBRARY_PATH"
+    exec /system/bin/linker64 "\$DIR/node.bin" "\$DIR/lib/node_modules/npm/bin/npm-cli.js" "\$@"
+else
+    exec "\$DIR/node" "\$DIR/lib/node_modules/npm/bin/npm-cli.js" "\$@"
+fi
+EOF
+
+    cat << EOF > "$OUT_DIR/npx"
+$SH_PATH
+DIR="\$(cd "\$(dirname "\$0")" && pwd)"
+if [ -f "/system/bin/linker64" ] && [ -f "\$DIR/node.bin" ]; then
+    export LD_LIBRARY_PATH="\$DIR/lib:\$LD_LIBRARY_PATH"
+    exec /system/bin/linker64 "\$DIR/node.bin" "\$DIR/lib/node_modules/npm/bin/npx-cli.js" "\$@"
+else
+    exec "\$DIR/node" "\$DIR/lib/node_modules/npm/bin/npx-cli.js" "\$@"
+fi
+EOF
+
+    cat << EOF > "$OUT_DIR/pnpm"
+$SH_PATH
+DIR="\$(cd "\$(dirname "\$0")" && pwd)"
+if [ -f "/system/bin/linker64" ] && [ -f "\$DIR/node.bin" ]; then
+    export LD_LIBRARY_PATH="\$DIR/lib:\$LD_LIBRARY_PATH"
+    exec /system/bin/linker64 "\$DIR/node.bin" "\$DIR/lib/node_modules/pnpm.cjs" "\$@"
+else
+    exec "\$DIR/node" "\$DIR/lib/node_modules/pnpm.cjs" "\$@"
+fi
+EOF
+
+    chmod +x "$OUT_DIR/npm" "$OUT_DIR/npx" "$OUT_DIR/pnpm"
+fi
+
 echo "Build complete."
