@@ -114,7 +114,7 @@ else
     export LD_LIBRARY_PATH="$DIR/lib:$LD_LIBRARY_PATH"
     exec "$DIR/php.bin" "$@"
 fi
-    EOF
+EOF
     chmod +x "$OUT_DIR/php"
     ;;
   *)
