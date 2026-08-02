@@ -1,6 +1,6 @@
 {
   "php": {
-    "latest": "8.3.0",
+    "latest": "8.4.0",
     "versions": {
       "8.3.0": {
         "android": {
@@ -39,6 +39,39 @@
             "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.3.0/php-windows-x64.zip",
             "sha256": "b2ee3c6201352adc6d6008d57c08eaccba5bfdedea86d7bbb1e3b6ce741670fa",
             "size": 848192
+          }
+        }
+      },
+      "8.4.0": {
+        "android": {
+          "arm64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-android-arm64-v8a.tar.gz",
+            "sha256": "aa80953a1e358c56a69d81708a0426f640559bcfd4d69f0a913fd2a06e2d7a71",
+            "size": 34683809
+          }
+        },
+        "linux": {
+          "arm64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-linux-arm64.tar.gz",
+            "sha256": "af14ec0cda52e1c95e0ab9da0b328eac96df1c3c9b08cc85f23cfb666de40b5a",
+            "size": 9702662
+          },
+          "x64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-linux-x64.tar.gz",
+            "sha256": "3f62cb198cf13d3dc9f890145ffce3879d5cb61b5d57b17976d0858e49307f44",
+            "size": 9605695
+          }
+        },
+        "macos": {
+          "arm64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-macos-arm64.tar.gz",
+            "sha256": "c18abfb674eef2dac9b2f06235b17bed9f947fcba7df7eb6ea907f80c7e09a14",
+            "size": 10425881
+          },
+          "x64": {
+            "url": "https://github.com/resitdc/rakoda-runtime/releases/download/php-v8.4.0/php-macos-x64.tar.gz",
+            "sha256": "f094761a9e1963b1ff1b62d5997c4b13a6b7d8fd849bddcdf0adc50f7ac47dd6",
+            "size": 10404421
           }
         }
       }
